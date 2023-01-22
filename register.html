@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>Регистрация</title>
+</head>
+
+<body>
+    <h1>Регистрация</h1>
+
+    <form action="/register" method="POST">
+        <label for="register_email">Username</label>
+        <input type="text" placeholder="Enter email" name="register_email" required><br><br>
+
+        <label for="register_pw">Password</label>
+        <input type="password" placeholder="Enter password" name="register_pw" required><br><br>
+
+        <label for="register_repeat_pw">Repeat Password</label>
+        <input type="password" placeholder="Enter password again" name="register_repeat_pw" required><br><br>
+
+        <button type="submit">Sign up</button>
+    </form>
+
+    <p>
+        Already have an accout?
+        <a href="/login">Log in!</a>
+    </p>
+</body>
+
+</html>
