@@ -1,3 +1,5 @@
+{% load static %} 
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -8,9 +10,24 @@
 <body>
     <h1>Регистрация</h1>
 
-    <form action="/register" method="POST">
-        <label for="register_email">Username</label>
-        <input type="text" placeholder="Enter email" name="register_email" required><br><br>
+    <div>
+        <style>
+            h5 {
+                color:red;
+            }
+        </style>
+        {% for message in messages %}
+        <h5>{{message}}</h5>
+        {% endfor %}
+    </div>
+
+    <form action="register" method="POST">
+        {% csrf_token %}
+        <label for="register_username">Username</label>
+        <input type="text" placeholder="Enter username" name="register_username" required><br><br>
+
+        <label for="register_email">Email</label>
+        <input type="email" placeholder="Enter email" name="register_email" required><br><br>
 
         <label for="register_pw">Password</label>
         <input type="password" placeholder="Enter password" name="register_pw" required><br><br>

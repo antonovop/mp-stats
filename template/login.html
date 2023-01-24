@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -7,12 +9,22 @@
 
 <body>
     <h1>Авторизация</h1>
-    <% if (messages.error) { %>
-        <%= messages.error %>
-    <% } %>
+
+    <div>
+        <style>
+            h5 {
+                color: red;
+            }
+        </style>
+        {% for message in messages %}
+        <h5>{{message}}</h5>
+        {% endfor %}
+    </div>
+
     <form action="/login" method="POST">
-        <label for="login_email">Username</label>
-        <input type="email" placeholder="Enter email" name="login_meail" required><br><br>
+        {% csrf_token %}
+        <label for="login_id">Username</label>
+        <input type="text" placeholder="Enter login" name="login_id" required><br><br>
 
         <label for="login_pw">Password</label>
         <input type="password" placeholder="Enter password" name="login_pw" required><br><br>
