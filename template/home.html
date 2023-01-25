@@ -8,9 +8,46 @@
 </head>
 
 <body>
-    <h1>Добро пожаловать!</h1>
+    <h2>Добро пожаловать, {{ user.username }}!</h2>
     <p>Здесь можно добавить ключевые слова и отслеживать статистику</p>
-    <a href="logout">Выйти из аккаунта</a>
+
+    <ul>
+        <li>
+            <a href="#">Личный кабинет</a>
+        </li>
+        <li>
+            <a href="#">Мои товары</a>
+        </li>
+        <li>
+            <a href="#">Поиск ключевых слов</a>
+        </li>
+        <li>
+            <a href="#">Тарифы</a>
+        </li>
+        <li>
+            <a href="logout">Выйти из аккаунта</a>
+        </li>
+    </ul>
+
+    <h3>Ваши товары</h3>
+    <table style="width:100%">
+        <tr>
+            <th>Ozon</th>
+            <th>Wildberries</th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    {% for item in list %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td action="wildberries">
+
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>

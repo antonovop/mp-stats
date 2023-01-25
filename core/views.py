@@ -44,7 +44,7 @@ def register(request):
             user=user_model, email=user_model.email, id_user=user_model.id)
         new_profile.save()
 
-        return redirect('home')
+        return redirect('/home')
 
     return render(request, 'register.html')
 
@@ -59,8 +59,8 @@ def login(request):
         user = auth.authenticate(username=login, password=pw)
 
         if (user is None):
-            messages.info('Такого пользователя не существует!')
-            return redirect('login.html')
+            messages.info(request, 'Неправильные данные')
+            return redirect('/login')
 
         auth.login(request, user)
         return redirect('/home')
@@ -75,4 +75,12 @@ def logout(request):
 
 @login_required(login_url='login')
 def home(request):
-    return render(request, 'home.html')
+    user = request.user.id
+    user_model = Profile.objects.get(id_user=user)
+
+    if (len(user_model.ozon_products) == 0):
+        return render(request, 'home.html', {'list': ['Вы пока не добавляли товаров']})
+
+    lst = user_model.ozon_products.split('\n')
+
+    return render(request, 'home.html', {'list': lst})
