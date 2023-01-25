@@ -23,24 +23,24 @@
 
     <form action="/login" method="POST">
         {% csrf_token %}
-        <label for="login_id">Username</label>
-        <input type="text" placeholder="Enter login" name="login_id" required><br><br>
+        <label for="login_id">Логин</label>
+        <input type="text" placeholder="Введите логин" name="login_id" required><br><br>
 
-        <label for="login_pw">Password</label>
-        <input type="password" placeholder="Enter password" name="login_pw" required><br><br>
+        <label for="login_pw">Пароль</label>
+        <input type="password" placeholder="Введите пароль" name="login_pw" required><br><br>
 
-        <button type="sumbit">Sign in</button>
+        <button type="sumbit">Войти</button>
     </form>
 </body>
 
 <p>
-    Don't have an ccount?
-    <a href="/register">Sign up!</a>
+    Нет аккаунта?
+    <a href="/register">Зарегистрироваться</a>
 </p>
 
 <p>
-    Forgot the password?
-    <a href="#">Restore it!</a>
+    Забыли пароль?
+    <a href="#">Восстановите его</a>
 </p>
 
 </html>

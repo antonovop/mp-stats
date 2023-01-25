@@ -10,8 +10,7 @@ class Profile(models.Model):
     id_user = models.TextField()
     profile_img = models.ImageField(
         upload_to='profile_images', default='blank profile image.png')
-    # list of products that user has chosen for tracking
-    # for simplicity, let's store it as a string
+    # list of products that user has added
     ozon_products = models.TextField(blank=True)
     wb_products = models.TextField(blank=True)
 

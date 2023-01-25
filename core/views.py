@@ -9,6 +9,13 @@ from .models import Profile
 def index(request):
     return render(request, 'index.html')
 
+# doesn't belong to the views.py
+# use it it register function
+
+
+def password_security(pw):
+    pass
+
 
 def register(request):
 
@@ -56,11 +63,12 @@ def login(request):
         login = request.POST['login_id']
         pw = request.POST['login_pw']
 
+        user = None
         user = auth.authenticate(username=login, password=pw)
 
         if (user is None):
-            messages.info(request, 'Неправильные данные')
-            return redirect('/login')
+            messages.info(request, 'Данные введены неправильно')
+            return render(request, 'login.html')
 
         auth.login(request, user)
         return redirect('/home')
@@ -77,10 +85,21 @@ def logout(request):
 def home(request):
     user = request.user.id
     user_model = Profile.objects.get(id_user=user)
+    ozon_lst = []
+    wb_lst = []
 
-    if (len(user_model.ozon_products) == 0):
-        return render(request, 'home.html', {'list': ['Вы пока не добавляли товаров']})
+    ozon_bool = False
+    wb_bool = False
+    if len(user_model.ozon_products) == 0:
+        ozon_lst.append('Вы пока не добавляли товаров')
+        ozon_bool = True
+    if len(user_model.wb_products) == 0:
+        wb_lst.append('Вы пока не добавляли товаров')
+        wb_bool = True
 
-    lst = user_model.ozon_products.split('\n')
+    if ozon_bool == False:
+        ozon_lst = user_model.ozon_products.split('\n')
+    if wb_bool == False:
+        wb_lst = user_model.wm_products.split('\n')
 
-    return render(request, 'home.html', {'list': lst})
+    return render(request, 'home.html', {'ozon_list': ozon_lst, 'wb_list': wb_lst})

@@ -5,12 +5,15 @@
 
 <head>
     <title>Главная страница</title>
+    <link rel="stylesheet" href="../static/style/home_buttons_vis.css">
+    <link rel="stylesheet" href="../static/style/home_add_product.css">
+    <script src="../static/script/home_buttons_vis.js"></script>
 </head>
 
 <body>
     <h2>Добро пожаловать, {{ user.username }}!</h2>
     <p>Здесь можно добавить ключевые слова и отслеживать статистику</p>
-
+    <hr>
     <ul>
         <li>
             <a href="#">Личный кабинет</a>
@@ -28,26 +31,43 @@
             <a href="logout">Выйти из аккаунта</a>
         </li>
     </ul>
+    <hr>
+    <h3>Выберите маркетплейс</h3>
 
-    <h3>Ваши товары</h3>
-    <table style="width:100%">
-        <tr>
-            <th>Ozon</th>
-            <th>Wildberries</th>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    {% for item in list %}
-                    <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td action="wildberries">
+    <button onclick="toggle_visibility('ozon', 'wb', 'first');">Ozon</button>
+    <button onclick="toggle_visibility('ozon', 'wb', 'second');">Wildberries</button>
+    <button onclick="toggle_visibility('ozon', 'wb', 'all');">Скрыть товары</button>
 
-            </td>
-        </tr>
-    </table>
+    <div id="dark_product_window">
+        <div id="add_product_window">
+            Введите артикул товара --> 12344<br>
+            <a href="#" class="close">Закрыть окно</a>
+        </div>
+    </div>
+
+    <div id="ozon">
+        <h3>Ваши товары на маркетплейсе Ozon </h3>
+
+        <input type="button" onclick="location.href='#dark_product_window'" value="Добавить товар" />
+
+        {% for item in ozon_list %}
+        <li>{{ item }}</li>
+        {% endfor %}
+
+    </div>
+    <div id="wb">
+        <h3>Ваши товары на маркетплейсе Wildberries </h3>
+
+        <input type="button" onclick="location.href='#dark_product_window'" value="Добавить товар" />
+
+        {% for item in wb_list %}
+        <li>{{ item }}</li>
+        {% endfor %}
+
+    </div>
+
+    <hr>
+    <h3>Что-то ещё..</h3>
 </body>
 
 </html>

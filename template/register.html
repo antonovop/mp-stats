@@ -23,24 +23,24 @@
 
     <form action="register" method="POST">
         {% csrf_token %}
-        <label for="register_username">Username</label>
-        <input type="text" placeholder="Enter username" name="register_username" required><br><br>
+        <label for="register_username">Логин</label>
+        <input type="text" placeholder="Введите логин" name="register_username" required><br><br>
 
-        <label for="register_email">Email</label>
-        <input type="email" placeholder="Enter email" name="register_email" required><br><br>
+        <label for="register_email">Почта</label>
+        <input type="email" placeholder="Введите почту" name="register_email" required><br><br>
 
-        <label for="register_pw">Password</label>
-        <input type="password" placeholder="Enter password" name="register_pw" required><br><br>
+        <label for="register_pw">Пароль</label>
+        <input type="password" placeholder="Введите пароль" name="register_pw" required><br><br>
 
-        <label for="register_repeat_pw">Repeat Password</label>
-        <input type="password" placeholder="Enter password again" name="register_repeat_pw" required><br><br>
+        <label for="register_repeat_pw">Повторите пароль</label>
+        <input type="password" placeholder="Повторите ввод пароля" name="register_repeat_pw" required><br><br>
 
-        <button type="submit">Sign up</button>
+        <button type="submit">Зарегистрироваться</button>
     </form>
 
     <p>
-        Already have an accout?
-        <a href="/login">Log in!</a>
+        Уже есть аккаунт?
+        <a href="/login">Войдите в него!</a>
     </p>
 </body>
 
