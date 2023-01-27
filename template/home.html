@@ -8,11 +8,17 @@
     <link rel="stylesheet" href="../static/style/home_buttons_vis.css">
     <link rel="stylesheet" href="../static/style/home_add_product.css">
     <script src="../static/script/home_buttons_vis.js"></script>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 
 <body>
     <h2>Добро пожаловать, {{ user.username }}!</h2>
-    <p>Здесь можно добавить ключевые слова и отслеживать статистику</p>
+    <p>Здесь можно добавлять товары, статистику которых вы бы хотели отслеживать</p>
     <hr>
     <ul>
         <li>
@@ -40,29 +46,51 @@
 
     <div id="dark_product_window">
         <div id="add_product_window">
-            Введите артикул товара --> 12344<br>
-            <a href="#" class="close">Закрыть окно</a>
+            <form action="add_product_code" method="POST">
+                {% csrf_token %}
+                <label for="code">Код товара</label>
+                <input type="text" placeholder="Введите код товара" name="code"><br>
+
+                <a href="#" class="close">Закрыть</a>
+                <button type="sumbit" id="add_ozon onclick="toggle_visibility('add_ozon', 'add_wb', 'first');" >Добавить</button>
+                <button type="sumbit" id="add_wb">Добавить</button>
+            </form>
         </div>
     </div>
 
     <div id="ozon">
         <h3>Ваши товары на маркетплейсе Ozon </h3>
 
-        <input type="button" onclick="location.href='#dark_product_window'" value="Добавить товар" />
+        <input type="button" onclick="location.href='#dark_product_window';toggle_visibility('add_ozon', 'add_wb', 'first');" value="Добавить товар" />
 
         {% for item in ozon_list %}
-        <li>{{ item }}</li>
+            <li>{{ item }}</li>
         {% endfor %}
 
     </div>
     <div id="wb">
         <h3>Ваши товары на маркетплейсе Wildberries </h3>
 
-        <input type="button" onclick="location.href='#dark_product_window'" value="Добавить товар" />
+        <input type="button" onclick="location.href='#dark_product_window';toggle_visibility('add_ozon', 'add_wb', 'second');" value="Добавить товар" />
 
-        {% for item in wb_list %}
-        <li>{{ item }}</li>
-        {% endfor %}
+        {% if wb_list == '[]' %}
+            <p>Вы пока не добавляли товаров</p>
+        {% else %}
+            <table style="width:100%;">
+                <tr>
+                    <td>Бренд</td>
+                    <td>Название товара</td>
+                    <td>Артикул товара</td>
+                </tr>
+                {% for item in wb_list %}
+                    <tr>
+                        {% for item_inner in item %}
+                            <td>{{ item_inner }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
 
     </div>
 

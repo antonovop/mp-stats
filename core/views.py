@@ -1,7 +1,10 @@
+import time
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 
@@ -11,10 +14,6 @@ def index(request):
 
 # doesn't belong to the views.py
 # use it it register function
-
-
-def password_security(pw):
-    pass
 
 
 def register(request):
@@ -85,21 +84,80 @@ def logout(request):
 def home(request):
     user = request.user.id
     user_model = Profile.objects.get(id_user=user)
-    ozon_lst = []
-    wb_lst = []
 
-    ozon_bool = False
-    wb_bool = False
-    if len(user_model.ozon_products) == 0:
-        ozon_lst.append('Вы пока не добавляли товаров')
-        ozon_bool = True
-    if len(user_model.wb_products) == 0:
-        wb_lst.append('Вы пока не добавляли товаров')
-        wb_bool = True
+    ozon_list = user_model.string_to_json(user_model.ozon_products)
+    wb_list = user_model.string_to_json(user_model.wb_products)
 
-    if ozon_bool == False:
-        ozon_lst = user_model.ozon_products.split('\n')
-    if wb_bool == False:
-        wb_lst = user_model.wm_products.split('\n')
+    # for home.html; line ~76
+    if (len(ozon_list) == 0):
+        ozon_list = '[]'
 
-    return render(request, 'home.html', {'ozon_list': ozon_lst, 'wb_list': wb_lst})
+    if (len(wb_list) == 0):
+        wb_list = '[]'
+
+    return render(request, 'home.html', {'ozon_list': ozon_list, 'wb_list': wb_list})
+
+
+def add_product_code(request):
+
+    product_code = request.POST['code']
+    if (repeat_checker(request, product_code)):
+        return redirect(home)
+
+    response = html_parser(product_code)
+    # check if the response is not none
+
+    user = request.user.id
+    user_model = Profile.objects.get(id_user=user)
+    user_model.fill_storage_wb(response)
+    user_model.save()
+
+    return redirect(home)
+
+
+def repeat_checker(request, id):
+    user = request.user.id
+    user_model = Profile.objects.get(id_user=user)
+    # wb_goods is a string
+    wb_goods = user_model.wb_products
+    json_wb_goods = user_model.string_to_json(wb_goods)
+
+    for item in json_wb_goods:
+        # item[2] is an article
+        if (int(item[2]) == id):
+            return True
+
+    return False
+
+
+def html_parser(id):
+    url = 'https://www.wildberries.ru/catalog/13158614/detail.aspx'
+
+    def get_new_url(id):
+        lst = url.split('/')
+        lst[-2] = str(id)
+        return '/'.join(lst)
+
+    def create_driver(url):
+        options = Options()
+        options.add_argument("--headless")
+        driver = webdriver.Chrome(options=options)
+        driver.get(url)
+        time.sleep(2)
+        return driver
+
+    def extract_data(driver):
+        good_name = driver.find_element(By.CLASS_NAME, 'product-page__header')
+        good_id = driver.find_element(By.ID, 'productNmId')
+        return [good_name, good_id]
+
+    def data_uniform(src_lst, full_name):
+        # splitting first string into
+        # the [brand_name, good_name,] list
+        name_list = full_name.split('\n')
+        return [name_list[0], name_list[1], src_lst[1].text]
+
+    actual_url = get_new_url(id)
+    driver = create_driver(actual_url)
+    raw_data_list = extract_data(driver)
+    return data_uniform(raw_data_list, raw_data_list[0].text)
